@@ -5,9 +5,14 @@ RUN apt-get -y update && \
   apt-get -y \
   install python-dev \
   python-pip \
-  nginx
+  
+  nginx \
+  uwsgi-plugin-python \
+  uwsgi
 
 RUN pip install https://github.com/graphite-project/ceres/tarball/master && \
+  pip install Django && \
+  pip install django-tagging && \
   pip install whisper && \
   pip install carbon && \
   pip install graphite-web
@@ -18,19 +23,21 @@ ADD ./graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 ADD ./graphite/carbon.conf /opt/graphite/conf/carbon.conf
 ADD ./graphite/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 ADD ./graphite/storage-aggregation.conf /opt/graphite/conf/storage-aggregation.conf
+ADD ./graphite/wsgi.py /opt/graphite/conf/wsgi.py
+RUN python /opt/graphite/webapp/graphite/manage.py syncdb
+RUN chown -R www-data:www-data /opt/graphite/webapp/ /opt/graphite/storage/
 
 # configure nginx
-RUN rm /etc/nginx/sites-enabled/default
 ADD nginx/nginx.conf /etc/nginx/nginx.conf
 ADD nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
-# daemons
-ADD daemons/carbon.sh /etc/service/carbon/run
-ADD daemons/carbon-aggregator.sh /etc/service/carbon-aggregator/run
-ADD daemons/graphite.sh /etc/service/graphite/run
-#ADD daemons/nginx.sh /etc/service/nginx/run
+# configure uwsgi
+ADD uwsgi/graphite.ini /etc/uwsgi/apps-available/graphite.ini
+RUN ln -s /etc/uwsgi/apps-available/graphite.ini /etc/uwsgi/apps-enabled/
 
-EXPOSE 80 2003
-ENTRYPOINT ["/usr/sbin/nginx"]
-
+EXPOSE 8080 2003
+CMD /opt/graphite/bin/carbon-cache.py start && \
+  /etc/init.d/uwsgi restart && \
+  /etc/init.d/nginx restart && \
+  /bin/bash
