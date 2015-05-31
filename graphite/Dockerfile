@@ -2,20 +2,18 @@ FROM     ubuntu:14.04.1
 
 # Install prerequisites
 RUN apt-get -y update && \
-  apt-get -y \
-  install python-dev \
+  apt-get -y install python-dev \
   python-pip \
   
-  nginx \
-  uwsgi-plugin-python \
-  uwsgi
+  nginx
 
-RUN pip install https://github.com/graphite-project/ceres/tarball/master && \
-  pip install Django && \
-  pip install django-tagging && \
-  pip install whisper && \
-  pip install carbon && \
-  pip install graphite-web
+RUN pip install https://github.com/graphite-project/ceres/tarball/master \
+  Django \
+  django-tagging \
+  whisper \
+  carbon \
+  graphite-web \
+  uwsgi
   
 # Configure Whisper, Carbon and Graphite-Web
 ADD ./graphite/initial_data.json /opt/graphite/webapp/graphite/initial_data.json
@@ -38,7 +36,6 @@ RUN ln -s /etc/uwsgi/apps-available/graphite.ini /etc/uwsgi/apps-enabled/
 
 EXPOSE 8080 2003
 
-# TODO fix uwsgi start fail
-CMD /opt/graphite/bin/carbon-cache.py start ; \
-  /etc/init.d/uwsgi start ; \
+CMD /opt/graphite/bin/carbon-cache.py start && \
+  /usr/local/bin/uwsgi -d --ini /etc/uwsgi/apps-available/graphite.ini && \
   /etc/init.d/nginx start
