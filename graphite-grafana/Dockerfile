@@ -6,6 +6,8 @@ RUN apt-get -y update && \
   # for graphite
   apt-get -y install python-dev \
   python-pip \
+  libcairo2 \
+  libffi-dev \
   
   nginx \
   
@@ -17,9 +19,16 @@ RUN apt-get -y update && \
 RUN pip install https://github.com/graphite-project/ceres/tarball/master \
   Django \
   django-tagging \
+  Twisted \
+  
+  pytz \
+  cairocffi \ 
+  cffi \
+  
   whisper \
   carbon \
   graphite-web \
+  
   uwsgi
 
 RUN wget https://grafanarel.s3.amazonaws.com/builds/grafana_2.0.2_amd64.deb && \
