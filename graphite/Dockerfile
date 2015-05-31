@@ -24,7 +24,7 @@ ADD ./graphite/carbon.conf /opt/graphite/conf/carbon.conf
 ADD ./graphite/storage-schemas.conf /opt/graphite/conf/storage-schemas.conf
 ADD ./graphite/storage-aggregation.conf /opt/graphite/conf/storage-aggregation.conf
 ADD ./graphite/wsgi.py /opt/graphite/conf/wsgi.py
-RUN python /opt/graphite/webapp/graphite/manage.py syncdb
+RUN python /opt/graphite/webapp/graphite/manage.py syncdb --noinput
 RUN chown -R www-data:www-data /opt/graphite/webapp/ /opt/graphite/storage/
 
 # configure nginx
