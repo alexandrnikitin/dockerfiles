@@ -31,11 +31,10 @@ ADD nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
 # configure uwsgi
-ADD uwsgi/graphite.ini /etc/uwsgi/apps-available/graphite.ini
-RUN ln -s /etc/uwsgi/apps-available/graphite.ini /etc/uwsgi/apps-enabled/
+ADD uwsgi/graphite.ini /etc/uwsgi/graphite.ini
 
 EXPOSE 8080 2003
 
 CMD /opt/graphite/bin/carbon-cache.py start && \
-  /usr/local/bin/uwsgi -d --ini /etc/uwsgi/apps-available/graphite.ini && \
+  /usr/local/bin/uwsgi -d --ini /etc/uwsgi/graphite.ini && \
   /etc/init.d/nginx start
