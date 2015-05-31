@@ -4,17 +4,26 @@ FROM     ubuntu:14.04.1
 RUN apt-get -y update && \
   apt-get -y install python-dev \
   python-pip \
+  libcairo2 \
+  libffi-dev \
   
   nginx
 
 RUN pip install https://github.com/graphite-project/ceres/tarball/master \
   Django \
   django-tagging \
+  Twisted \
+  
+  pytz \
+  cairocffi \ 
+  cffi \
+  
   whisper \
   carbon \
   graphite-web \
-  uwsgi
   
+  uwsgi
+
 # Configure Whisper, Carbon and Graphite-Web
 ADD ./graphite/initial_data.json /opt/graphite/webapp/graphite/initial_data.json
 ADD ./graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
