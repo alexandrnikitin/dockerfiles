@@ -37,7 +37,8 @@ ADD uwsgi/graphite.ini /etc/uwsgi/apps-available/graphite.ini
 RUN ln -s /etc/uwsgi/apps-available/graphite.ini /etc/uwsgi/apps-enabled/
 
 EXPOSE 8080 2003
-CMD /opt/graphite/bin/carbon-cache.py start && \
-  /etc/init.d/uwsgi restart && \
-  /etc/init.d/nginx restart && \
-  /bin/bash
+
+# TODO fix uwsgi start fail
+CMD /opt/graphite/bin/carbon-cache.py start ; \
+  /etc/init.d/uwsgi start ; \
+  /etc/init.d/nginx start
