@@ -1,10 +1,9 @@
-To start:
+To build:
 ```
 docker build -t graphite .
 ```
 
-To stop:
-
+To stop/start:
 ```
 docker stop graphite
 docker rm graphite
