@@ -11,7 +11,6 @@ docker rm graphite
 sudo docker run -d \
   --name graphite \
   -v /path/to/host/graphite/storage:/opt/graphite/storage \
-  -v /path/to/host/log:/var/log \
   -p 8080:8080 \
   -p 2003:2003 \
   graphite
