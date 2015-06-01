@@ -45,7 +45,8 @@ ADD ./graphite/wsgi.py /opt/graphite/conf/wsgi.py
 RUN python /opt/graphite/webapp/graphite/manage.py syncdb --noinput
 RUN chown -R www-data:www-data /opt/graphite/webapp/ /opt/graphite/storage/
 
-# TODO configure Grafana
+# configure Grafana
+ADD ./grafana/custom.ini /etc/grafana/custom.ini
 
 # configure nginx
 ADD nginx/nginx.conf /etc/nginx/nginx.conf
@@ -65,5 +66,6 @@ EXPOSE 8080 2003 3000
 
 CMD /opt/graphite/bin/carbon-cache.py start && \
   /usr/local/bin/uwsgi -d --ini /etc/uwsgi/graphite.ini && \
+# TODO grafana uses custom configuration
   service grafana-server start && \
   /etc/init.d/nginx start
