@@ -55,7 +55,11 @@ RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/grap
 # configure uwsgi
 ADD uwsgi/graphite.ini /etc/uwsgi/graphite.ini
 
-# TODO Add shared volumes 
+VOLUME ["/var/log"]
+VOLUME ["/opt/graphite/storage"]
+# grafana db
+VOLUME ["/var/lib/grafana"]
+
 
 EXPOSE 8080 2003 3000
 
