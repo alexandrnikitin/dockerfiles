@@ -42,7 +42,8 @@ RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/grap
 # configure uwsgi
 ADD uwsgi/graphite.ini /etc/uwsgi/graphite.ini
 
-# TODO Add shared volumes 
+VOLUME ["/var/log"]
+VOLUME ["/opt/graphite/storage"]
 
 EXPOSE 8080 2003
 
