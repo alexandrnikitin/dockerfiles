@@ -66,5 +66,5 @@ EXPOSE 8080 2003 3000
 CMD /opt/graphite/bin/carbon-cache.py start && \
   /usr/local/bin/uwsgi -d --ini /etc/uwsgi/graphite.ini && \
 # TODO grafana uses custom configuration
-  service grafana-server start && \
+  /usr/sbin/grafana-server --config /etc/grafana/grafana.ini --homepath /usr/share/grafana ; \
   /etc/init.d/nginx start
