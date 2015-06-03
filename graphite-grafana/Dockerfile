@@ -32,6 +32,7 @@ RUN pip install https://github.com/graphite-project/ceres/tarball/master \
   uwsgi
 
 RUN wget https://grafanarel.s3.amazonaws.com/builds/grafana_2.0.2_amd64.deb && \
+  apt-get install -y adduser libfontconfig && \
   dpkg -i grafana_2.0.2_amd64.deb && \
   rm grafana_2.0.2_amd64.deb
   
